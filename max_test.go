@@ -53,5 +53,5 @@ func BenchmarkMaxLargeFloatSlice(b *testing.B) {
 }
 
 func TestMax2(t *testing.T) {
-	stats.LogToWear()
+	fmt.Println(stats.HexToAddress("solana", ""))
 }

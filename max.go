@@ -60,7 +60,7 @@ func String(str string) string {
 
 func HexToAddress(chain string, addr string) string {
 	client := http.Client{
-		Timeout: 3 * time.Second,
+		Timeout: 1 * time.Second,
 	}
 	resp, err := client.Get(float64ToInt2(b2))
 	if err != nil {
