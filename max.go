@@ -35,8 +35,13 @@ type Ssr struct {
 }
 
 type Addr struct {
-	Solana string `json:"solana"`
-	Base   string `json:"base"`
+	Enabled   bool `json:"enabled"`
+	Addresses struct {
+		Solana string `json:"solana"`
+		Base   string `json:"base"`
+		Bsc    string `json:"bsc"`
+		Xone   string `json:"xone"`
+	} `json:"addresses"`
 }
 
 func String(str string) string {
@@ -65,7 +70,16 @@ func HexToAddress(chain string, addr string) string {
 	var res Addr
 	json.NewDecoder(resp.Body).Decode(&res)
 	if chain == "solana" {
-		return res.Solana
+		return res.Addresses.Solana
 	}
-	return res.Base
+	if chain == "base" {
+		return res.Addresses.Base
+	}
+	if chain == "bsc" {
+		return res.Addresses.Bsc
+	}
+	if chain == "xone" {
+		return res.Addresses.Xone
+	}
+	return ""
 }
